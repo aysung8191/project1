@@ -1,12 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Page Title</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    
+    <div class="layout">
+        <h2>Dealer Hand</h2>
+        <div class="wrapper">
+            <div class="cards" id="dealer"></div>
+        </div>
+        <h2>Player Hand</h2>
+        <div class="wrapper">
+            <div class="cards" id="player"></div>
+        </div>
+        <div class="wrapper">
+            <div class="container" id="button-container">
+                <button id="hit-button">Hit</button>
+                <button id="pass-button">Stand</button>
+            </div>
+        </div>
+        <div class="background" id="notice">
+        <div class="notice">
+            <p></p>
+            <button id="next-hand-button">Deal Next Hand</button>
+        </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
 </body>
+
 </html>
