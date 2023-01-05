@@ -26,7 +26,7 @@ let playerHand = [];
 //     showNotice(betText)
 // }
 
-// deck of cards - 52=13*4
+// create a deck of cards
 const createDeck = ()=> {
     const deck = [];
     suits.forEach((suit) => {
@@ -47,12 +47,46 @@ const shuffleDecks = (num) => {
     }
 }
 
-// select a card (random)
+// select a random card
 const selectRandomCard = () =>{
     const randomIndex = Math.floor(Math.random()*allDecks.length)
     const card = allDecks[randomIndex];
     allDecks.splice(randomIndex, 1);
     return card;
+}
+
+// what the value of the hand is
+const calcValue = (hand)=>{
+    let value = 0;
+    let hasAce = 0;
+    hand.forEach((card)=>{
+        if (card.length === 2) {
+            if(card[0] === 'A'){
+                hasAce += 1;
+            }else{
+                (card[0] === 'K' || card[0] === 'Q' || card[0] === 'J') ? value += 10 : value += Number(card[0]);
+            }
+        } else {
+            value += 10;
+        }
+    })
+    if(hasAce > 0){
+        value + 11 > 21 ? value += 1 : value += 11; 
+        value += (hasAce-1);
+    }
+    return value;
+}
+
+
+const showNotice = (text) => {
+    notice.children[0].children[0].innerHTML = text;
+    notice.style.display = "flex";
+    buttonContainer.style.display = "none";
+}
+
+const hideNotice = () => {
+    notice.style.display = 'none';
+    buttonContainer.style.display = "flex";
 }
 
 // deal hands to dealer and player
@@ -85,39 +119,6 @@ const dealHands = () => {
     }
 }
 
-// what the value of the hand is
-const calcValue = (hand)=>{
-    let value = 0;
-    let hasAce = 0;
-    hand.forEach((card)=>{
-        if (card.length === 2) {
-            if(card[0] === 'A'){
-                hasAce += 1;
-            }else{
-                (card[0] === 'K' || card[0] === 'Q' || card[0] === 'J') ? value += 10 : value += Number(card[0]);
-            }
-        } else {
-            value += 10;
-        }
-    })
-    if(hasAce > 0){
-        value + 11 > 21 ? value += 1 : value += 11; 
-        value += (hasAce-1);
-    }
-    return value;
-}
-
-const showNotice = (text) => {
-    notice.children[0].children[0].innerHTML = text;
-    notice.style.display = "flex";
-    buttonContainer.style.display = "none";
-}
-
-const hideNotice = () => {
-    notice.style.display = 'none';
-    buttonContainer.style.display = "flex";
-}
-
 const decideWinner = () => {
     let playerValue = calcValue(playerHand);
     let dealerValue = calcValue(dealerHand);
@@ -125,7 +126,7 @@ const decideWinner = () => {
         let text = `Your hand is ${playerHand} with a value of ${playerValue}.
 The dealers hand is ${dealerHand} with a value of ${dealerValue}.
 ${playerValue > dealerValue ? "<em>You win!</em>" : "<em>Dealer Wins!</em>"}`;
-    showNotice(text);
+        showNotice(text);
     } else {
         let pushText = `Your hand is ${playerHand} with a value of ${playerValue}.
 The dealers hand is ${dealerHand} with a value of ${dealerValue}.
@@ -151,12 +152,11 @@ const hitPlayer = () => {
 
 const hitDealer = () => {
     let handValue = calcValue(dealerHand);
-    console.log(handValue);
     // flip red card
     const hiddenCard = dealer.children[0];
     hiddenCard.classList.remove('back');
     hiddenCard.innerHTML = dealerHand[0];
-    if (handValue > 16 && handValue < 21) {
+    if (handValue > 16 && handValue <= 21) {
         decideWinner();
         return; 
     }

@@ -75,13 +75,11 @@ h2{
 }
 
 .background{
-    /* display: none; */
     justify-content: center;
     align-items: center;
     position: absolute;
     height: 50vh;
     width: 50vw;
-    /* background:rgba(0, 0, 0, 0.5); */
 }
 
 .notice{
