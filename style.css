@@ -1,5 +1,13 @@
-h1, h2, h3, h4, h5, h6, p{
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+body {
+    background-image: url(js/bjtable.jpg);
+    height: 100vh;
+    width: 100vw;
+    background-size: cover;
+    background-position: center;
+}
+
+h1, h2, p{
+    font-family: 0.5em 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 button{
@@ -14,7 +22,21 @@ button{
 }
 
 .layout{
+    display: flex;
+    flex-direction: column;
+}
+
+h1{
     text-align: center;
+}
+
+h2{
+    text-align: center;
+}
+
+#bank{
+    text-align: center;
+    margin-left: 400px;
 }
 
 .wrapper{
@@ -28,14 +50,15 @@ button{
 }
 
 .card{
-    height: 120px;
-    width: 120px;
+    height: 60px;
+    width: 80px;
     border: 2px solid black;
     padding-top: 60px;
     border-radius: 10px;
     font-size: 3rem;
     text-align: center;
     box-shadow: 1px 1px 3px 1px rgba(0,0,0,0.5);
+    background-color: white;
 }
 
 .card[data-red=true]{
@@ -43,8 +66,8 @@ button{
 }
 
 .back{
-    content: "";
-    background-color: green;
+    background-image: url(js/cardback.PNG);
+    background-size: contain;
 }
 
 .container{
@@ -52,15 +75,13 @@ button{
 }
 
 .background{
-    display: none;
+    /* display: none; */
     justify-content: center;
     align-items: center;
     position: absolute;
-    height: 100vh;
-    width: 100vw;
-    top: 0;
-    left: 0;
-    background:rgba(0, 0, 0, 0.5);
+    height: 50vh;
+    width: 50vw;
+    /* background:rgba(0, 0, 0, 0.5); */
 }
 
 .notice{
@@ -74,8 +95,11 @@ button{
 }
 
 .notice p{
-    margin: 0;
-    padding: 0;
     white-space: pre-wrap;
     line-height: 150%;
 }
+
+#notice{
+    display: none;
+}
+

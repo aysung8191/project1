@@ -11,11 +11,20 @@ const passButton = document.getElementById("pass-button");
 const buttonContainer = document.getElementById("button-container");
 const notice = document.getElementById("notice");
 const nextHandButton = document.getElementById("next-hand-button");
+// const bankEl = document.getElementById("bank");
 
 let allDecks = [];
 let dealerHand = [];
 let playerHand = [];
+// let bank = 500; 
 
+
+// place bets before game starts
+// const placeBet = ()=> {
+//     clearHands();
+//     let betText = `Place your bets!`
+//     showNotice(betText)
+// }
 
 // deck of cards - 52=13*4
 const createDeck = ()=> {
@@ -24,6 +33,7 @@ const createDeck = ()=> {
         values.forEach((value) => {
             const card = value + suit;
             deck.push(card);
+            // console.log(deck)
         });
     });
     return deck;
@@ -62,13 +72,20 @@ const dealHands = () => {
         (card[card.length-1] === '♦' || card[card.length-1] === '♥') && newCard.setAttribute('data-red', true);
         player.append(newCard);
     });
+    if (calcValue(playerHand) === 21) {
+        let winText = `You hit 21, you win!`
+        showNotice(winText);
+    }
+    if (calcValue(dealerHand) === 21) {
+        const hiddenCard = dealer.children[0];
+        hiddenCard.classList.remove('back');
+        hiddenCard.innerHTML = dealerHand[0];
+        let dealer21 = 'Dealer hit 21, Dealer wins!'
+        showNotice(dealer21);
+    }
 }
 
-// give the option to hit or pass
-// - add event listener button (if player has more than 21, then we bust and game is over)
-// - if player has < 21, then they can choose to hit or stand
 // what the value of the hand is
-
 const calcValue = (hand)=>{
     let value = 0;
     let hasAce = 0;
@@ -90,66 +107,72 @@ const calcValue = (hand)=>{
     return value;
 }
 
+const showNotice = (text) => {
+    notice.children[0].children[0].innerHTML = text;
+    notice.style.display = "flex";
+    buttonContainer.style.display = "none";
+}
+
+const hideNotice = () => {
+    notice.style.display = 'none';
+    buttonContainer.style.display = "flex";
+}
+
+const decideWinner = () => {
+    let playerValue = calcValue(playerHand);
+    let dealerValue = calcValue(dealerHand);
+    if (playerValue !== dealerValue){
+        let text = `Your hand is ${playerHand} with a value of ${playerValue}.
+The dealers hand is ${dealerHand} with a value of ${dealerValue}.
+${playerValue > dealerValue ? "<em>You win!</em>" : "<em>Dealer Wins!</em>"}`;
+    showNotice(text);
+    } else {
+        let pushText = `Your hand is ${playerHand} with a value of ${playerValue}.
+The dealers hand is ${dealerHand} with a value of ${dealerValue}.
+It's a push!`
+        showNotice(pushText);
+    }
+}
+
 // - if hit, add card
 // - if pass, let dealer play
-const hitPlayer = ()=>{
-    const newCard = selectRandomCard();
-    playerHand.push(newCard);
-    const newCardNode = cardModel.cloneNode(true);
-    newCardNode.innerHTML = newCard;
-    player.append(newCardNode);
-    const handValue = calcValue(playerHand);
+const hitPlayer = () => {
+    const card = selectRandomCard();
+    playerHand.push(card);
+    let handValue = calcValue(playerHand);
+    const newCard = cardModel.cloneNode(true);
+    newCard.innerHTML = card;
+    player.append(newCard);
     if (handValue > 21){
-        console.log('bust');
-        alert('bust')
-    } 
+        let text = `Bust! Your hand is ${playerHand} with a value of ${handValue}.`
+        showNotice(text)
+    }
 }
 
 const hitDealer = () => {
-    // flip green card
-    const hiddenCard = dealer.children[0];
-    hiddenCard.classList.remove("back");
-    hiddenCard.innerHTML = dealerHand[0];
-    // calc hand value
     let handValue = calcValue(dealerHand);
-    if(handValue <= 16){
-        let newCard = selectRandomCard();
-        dealerHand.push(newCard);
-        const newCardNode = cardModel.cloneNode(true);
-        newCardNode.innerHTML = newCard;
-        dealer.append(newCardNode);
-        handValue = calcValue(dealerHand);
-    }
-    // if hand value < 16, hit (add card)
-    if(handValue <= 16){
-        hitDealer();
-    }
-    // if value = 21, dealer wins
-    else if(handValue === 21) {
-        alert('dealer has 21 and wins!');
-    }
-    // if value > 21 dealer busts
-    else if(handValue > 21) {
-        alert('dealer busts and player wins!')
-    }
-    // else decide winner
-    else {
+    console.log(handValue);
+    // flip red card
+    const hiddenCard = dealer.children[0];
+    hiddenCard.classList.remove('back');
+    hiddenCard.innerHTML = dealerHand[0];
+    if (handValue > 16 && handValue < 21) {
         decideWinner();
+        return; 
     }
-}
-
-const decideWinner = ()=>{
-    let dealerValue = calcValue(dealerHand);
-    let playerValue = calcValue(playerHand);
-    alert(`Dealer has ${dealerValue}, you have ${playerValue}`);
-    if(dealerValue > playerValue) {
-        alert('dealer wins!')
+    // if handValue > 21, dealer busts and player wins
+    else {
+        showNotice(`Dealer busts with a hand of ${handValue}, Player wins!`);
+    }
+    // if handValue <= 16, hit dealer
+    if (handValue <= 16) {
+        const card = selectRandomCard();
+        dealerHand.push(card)
+        const newCard = cardModel.cloneNode(true);
+        newCard.innerHTML = card;
+        dealer.append(newCard);
+        hitDealer();
     } 
-    else if(playerValue > dealerValue){
-        alert('player wins!')
-    } else {
-        alert(`it's a push!`)
-    }
 }
 
 const clearHands = () =>{
@@ -162,15 +185,24 @@ const clearHands = () =>{
     return true;
 }
 
+const play = () =>{
+    clearHands();
+    hideNotice();
+    // place bet function goes here
+    // bankEl.innerHTML = `Bank: ${bank}`
+    dealHands();
+}
 
 hitButton.addEventListener('click', hitPlayer);
 passButton.addEventListener('click', hitDealer);
-
-
+nextHandButton.addEventListener('click', play);
 
 shuffleDecks(5);
-dealHands();
+play();
 
 
-// determine the winner
-// deal the next hand
+
+// Current Needs:
+// - Place Bets function
+// - Double down function
+// - Split function
