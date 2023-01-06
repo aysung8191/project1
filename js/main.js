@@ -19,7 +19,6 @@ let dealerHand = [];
 let playerHand = [];
 // let bank = 500; 
 
-
 // place bets before game starts
 // const placeBet = ()=> {
 //     clearHands();
@@ -206,8 +205,7 @@ passButton.addEventListener('click', hitDealer);
 nextHandButton.addEventListener('click', play);
 startButton.addEventListener('click', startFunction);
 
-
-// Current Needs:
+// Icebreakers:
 // - Place Bets function
 // - Double down function
 // - Split function
