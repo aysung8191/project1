@@ -11,6 +11,7 @@ const passButton = document.getElementById("pass-button");
 const buttonContainer = document.getElementById("button-container");
 const notice = document.getElementById("notice");
 const nextHandButton = document.getElementById("next-hand-button");
+const startButton = document.getElementById("start-button");
 // const bankEl = document.getElementById("bank");
 
 let allDecks = [];
@@ -25,6 +26,13 @@ let playerHand = [];
 //     let betText = `Place your bets!`
 //     showNotice(betText)
 // }
+
+const startFunction = ()=> {
+    shuffleDecks(5);
+    play();
+    buttonContainer.style.display = "flex";
+    startButton.remove();
+}
 
 // create a deck of cards
 const createDeck = ()=> {
@@ -123,13 +131,13 @@ const decideWinner = () => {
     let playerValue = calcValue(playerHand);
     let dealerValue = calcValue(dealerHand);
     if (playerValue !== dealerValue){
-        let text = `Your hand is ${playerHand} with a value of ${playerValue}.
-The dealers hand is ${dealerHand} with a value of ${dealerValue}.
+        let text = `The dealers hand is ${dealerHand} with a value of ${dealerValue}.
+Your hand is ${playerHand} with a value of ${playerValue}.
 ${playerValue > dealerValue ? "<em>You win!</em>" : "<em>Dealer Wins!</em>"}`;
         showNotice(text);
     } else {
-        let pushText = `Your hand is ${playerHand} with a value of ${playerValue}.
-The dealers hand is ${dealerHand} with a value of ${dealerValue}.
+        let pushText = `The dealers hand is ${dealerHand} with a value of ${dealerValue}.
+Your hand is ${playerHand} with a value of ${playerValue}.
 It's a push!`
         showNotice(pushText);
     }
@@ -196,10 +204,7 @@ const play = () =>{
 hitButton.addEventListener('click', hitPlayer);
 passButton.addEventListener('click', hitDealer);
 nextHandButton.addEventListener('click', play);
-
-shuffleDecks(5);
-play();
-
+startButton.addEventListener('click', startFunction);
 
 
 // Current Needs:
