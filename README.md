@@ -3,6 +3,8 @@ SEIR 1212 - Project 1 - BlackJack
 
 I decided to make BlackJack for my first project using HTML/CSS/JavaScript. 
 
+Launch game here: https://aysung8191.github.io/project1/
+
 ## BlackJack Game Overview:
 Blackjack, also commonly known as twenty-one, is a comparing card game between player(s) and the dealer, where the players competes against the dealer based on their turn. The objective of the game is to beat the dealer in one of the following ways: 
   1. Reach 21 on the player's first draw (first two cards) - called a "blackjack", without a dealer also hitting blackjack. 
